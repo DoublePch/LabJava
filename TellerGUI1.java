@@ -49,17 +49,21 @@ public class TellerGUI1 implements ActionListener, ItemListener {
 		      
 				Account ac = new SavingAccount(initAmount);
 				cust.addAccount(ac);
-				Account ac1 = new SavingAccount(initAmount);
+				double initAmount2 = CustomerStorage.getBalance();
+				Account ac1 = new SavingAccount(initAmount2);
 				cust.addAccount(ac1);
-				Account ac2 = new SavingAccount(initAmount);
+				double initAmount3 = CustomerStorage.getBalance();
+				Account ac2 = new SavingAccount(initAmount3);
 				cust.addAccount(ac2);
 		        
 		    } else {
 		        // กรณีไม่มีไฟล์ Customer.dat อยู่ให้สร้าง Account ใหม่ที่มีเงินเปิดบัญชี 4,000 บาท
 		    	Account ac = new SavingAccount(4000);
 				cust.addAccount(ac);
-				cust.addAccount(ac);
-				cust.addAccount(ac);
+				Account ac2 = new SavingAccount(4000);
+				cust.addAccount(ac2);
+				Account ac3 = new SavingAccount(4000);
+				cust.addAccount(ac3);
 		    }
 
 		tf1 = new JTextField();
@@ -131,7 +135,7 @@ public class TellerGUI1 implements ActionListener, ItemListener {
 		fr.add(err, BorderLayout.SOUTH);
 		
 
-		tf2.setText(cust.getAccount(0).getBalance() + "");
+		tf2.setText(cust.getAccount(i-1).getBalance() + "");
 		tf1.setText(cust.getFirstName() + " " + cust.getLastName());
 
 		fr.setLocationRelativeTo(null);
@@ -151,7 +155,7 @@ public class TellerGUI1 implements ActionListener, ItemListener {
 		err.setEditable(false);
 		err.setBackground(new Color(168, 218, 220));
 
-		tf2.setText(cust.getAccount(0).getBalance() + "");
+		tf2.setText(cust.getAccount(i-1).getBalance() + "");
 		tf1.setText(cust.getFirstName() + " " + cust.getLastName());
 		
 		
@@ -172,7 +176,7 @@ public class TellerGUI1 implements ActionListener, ItemListener {
 
 		i = Integer.parseInt(list.getSelectedItem());
 
-		tf2.setText(cust.getAccount(0).getBalance() + "");
+		tf2.setText(cust.getAccount(i-1).getBalance() + "");
 
 	}
 	public void actionPerformed(ActionEvent ev) {
@@ -182,17 +186,16 @@ public class TellerGUI1 implements ActionListener, ItemListener {
 		try {
 
 			if (cmd.equals("Exit")) {
-				CustomerStorage.saveBalance(cust.getAccount(0).getBalance());
+				CustomerStorage.saveBalance(cust.getAccount(i-1).getBalance());
 				System.exit(0);
 			}
 
 			else if (cmd.equals("Withdraw")) {
 				amt = Double.parseDouble(tf3.getText());
 				try {
-					cust.getAccount(0).withdraw(amt);
+					cust.getAccount(i-1).withdraw(amt);
 					err.setText("successful withdraw");
 					tf3.setText(" ");
-
 				} catch (WithdrawException ex) {
 					err.setText("Not enough money");
 					tf3.setText(" ");
@@ -206,7 +209,7 @@ public class TellerGUI1 implements ActionListener, ItemListener {
 				tf3.setText(" ");
 
 			}
-			tf2.setText(cust.getAccount(0).getBalance() + " ");
+			tf2.setText(cust.getAccount(i-1).getBalance() + " ");
 		} catch (NumberFormatException e) {
 			err.setText("Enter numbers ");
 			tf3.setText(" ");
